@@ -1,4 +1,13 @@
 package wit.edu.garnetyeates.minesweeper;
+import static wit.edu.garnetyeates.minesweeper.GamePanel.BLUE;
+import static wit.edu.garnetyeates.minesweeper.GamePanel.COL_BLANK_TILE;
+import static wit.edu.garnetyeates.minesweeper.GamePanel.GREEN;
+import static wit.edu.garnetyeates.minesweeper.GamePanel.ORANGE;
+import static wit.edu.garnetyeates.minesweeper.GamePanel.PURP;
+import static wit.edu.garnetyeates.minesweeper.GamePanel.RED;
+import static wit.edu.garnetyeates.minesweeper.GamePanel.YELLOW;
+
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +66,40 @@ public class Tile
 			}
 		}
 	}
+	
+	public Color determineColor()
+	{
+		Color col = null;
+		switch (number)
+		{
+		case 0:
+			col = COL_BLANK_TILE;
+			break;
+		case 1:
+			col = GREEN;
+			break;
+		case 2:
+			col = YELLOW;
+			break;
+		case 3:
+			col = ORANGE;
+			break;
+		case 4:
+			col = RED;
+			break;
+		case 5:
+			col = BLUE;
+			break;
+		case 6:
+			col = PURP;
+			break;
+		default:
+			col = Color.WHITE;
+			break;
+		}		
+		return col;
+	}
+	
 	
 	public List<Tile> getAdjacentTiles()
 	{

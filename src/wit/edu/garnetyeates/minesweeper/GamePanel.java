@@ -105,12 +105,19 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener
 		Tile.setTileList(tiles);
 	}
 	
+	/** The icon that appears on a tile when the player places a flag on it */
 	public final ImageIcon flagIcon = loadImage("flag.png");
+	
+	/** The icon that appears on a tile after the game ends to indicate that the player successfuly diffused a bomb there */
 	public final ImageIcon diffusedIcon = loadImage("redflag.png");
 	
+	/** The icon that appears on a tile after the game ends to show that there is a bomb there */
 	public final ImageIcon bombIcon = loadImage("bomb.png");
+	
+	/** The icon that appears on a tile after the game ends to show that the player lost the game by clicking here */
 	public final ImageIcon redBombIcon = loadImage("redbomb.png");
 	
+	/** A HashMap that associates integers with images of those respective integers */
 	public final HashMap<Integer, ImageIcon> numberIcons = new HashMap<>();
 	
 	/**
@@ -139,6 +146,13 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener
 	public static final Color BLUE = new Color(48, 164, 252);
 	public static final Color PURP = new Color(255, 61, 219);
 	
+	/**
+	 * This method draws all of the tiles in the game. If a tile is unrevealed, it will paint
+	 * it with {@link #COL_HIDDEN_TILE}. If it is revealed, the color that it paints depends on
+	 * how many bombs are nearby. If there are no bombs on the adjacent squares, then it will be
+	 * painted {@link #COL_BLANK_TILE}. This method will also draw the number images on tiles and
+	 * it will draw flags as well as bombs once the game ends
+	 */
 	@Override 
 	public void paint(Graphics g)
 	{
@@ -158,8 +172,7 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener
 			{
 				if (!t.isMine())
 				{
-					Color col = determineTileColor(t);
-				//	col = COL_BLANK;
+					Color col = t.determineColor();
 					g.setColor(t.isRevealed() ? col : COL_HIDDEN_TILE);
 					g.fillRect(t.getPixelX(), t.getPixelY(), TILE_SIZE, TILE_SIZE);
 					
@@ -182,47 +195,18 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener
 						g.setColor(COL_HIDDEN_TILE);
 						g.fillRect(t.getPixelX(), t.getPixelY(), TILE_SIZE, TILE_SIZE);
 					}
-
 				}
 			}
 		}
-		// TODO Auto-generated method stub
 	}
 
-	public static Color determineTileColor(Tile t)
-	{
-		int numBombsNear = t.getNumber();
-		Color col = null;
-		switch (numBombsNear)
-		{
-		case 0:
-			col = COL_BLANK_TILE;
-			break;
-		case 1:
-			col = GREEN;
-			break;
-		case 2:
-			col = YELLOW;
-			break;
-		case 3:
-			col = ORANGE;
-			break;
-		case 4:
-			col = RED;
-			break;
-		case 5:
-			col = BLUE;
-			break;
-		case 6:
-			col = PURP;
-			break;
-		default:
-			col = Color.WHITE;
-			break;
-		}		
-		return col;
-	}
-	
+	/**
+	 * This method returns the tile that exists in the given x,y array
+	 * coordinates for the {@link #mineField} array
+	 * @param x the x coordinate of the array
+	 * @param y the y coordinate of the array
+	 * @return the tile that exists here, or null if no tile exists here
+	 */
 	public Tile tileAt(int x, int y)
 	{
 		try
@@ -238,6 +222,10 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener
 	/** If this is true, no keyboard/mouse inputs will be registered by the program */
 	public boolean frozen = false;
 	
+	/**
+	 * This method is called when the game ends to make it so no inputs are registered
+	 * by the program
+	 */
 	public void freezeInputs()
 	{
 		frozen = true;
@@ -384,7 +372,7 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener
 	  BufferedImage buff = null;
 	  try
 	  {
-		  buff = ImageIO.read(getClass().getResourceAsStream(fileName));
+		  buff = ImageIO.read(getClass().getResourceAsStream("images/" + fileName));
 	  }
 	  catch (IOException e)
 	  {

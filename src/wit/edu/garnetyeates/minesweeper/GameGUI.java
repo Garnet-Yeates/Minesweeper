@@ -16,7 +16,7 @@ public class GameGUI extends JFrame
 			new GameGUI(gamePanel);
 		});
 	}
-	
+
 	public GameGUI(GamePanel panel)
 	{	
 		this.addKeyListener(panel);

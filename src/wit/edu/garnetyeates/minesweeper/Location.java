@@ -8,6 +8,6 @@ public class Location
 	public Location(int x, int y)
 	{
 		this.x = x;
-		this.y = y;
+		this.y = y; //
 	}
 }
